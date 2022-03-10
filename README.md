@@ -1,6 +1,6 @@
 # security.txt
 
-This library defines a macro, which aim it is to provide easy-to-parse information to security researchers that wish to contact the authors of a Solana smart contract.
+This library defines a macro, whose aim it is to provide easy-to-parse information to security researchers that wish to contact the authors of a Solana smart contract.
 It is inspired by https://securitytxt.org/.
 
 Add the following to the `[dependencies]` section of your Cargo.toml:
