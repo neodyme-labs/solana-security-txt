@@ -1,0 +1,2 @@
+[workspace]
+members = ["security-txt", "query-security-txt", "example-contract"]

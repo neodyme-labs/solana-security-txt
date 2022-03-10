@@ -1,0 +1,8 @@
+[package]
+name = "security-txt"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+thiserror = "1.0.30"
+twoway = "0.2.2"
