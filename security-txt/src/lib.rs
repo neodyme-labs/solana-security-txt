@@ -282,7 +282,7 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
 }
 
 /// Finds and parses the security.txt in the haystack
-pub fn parse_and_find(data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
+pub fn find_and_parse(data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
     let start = match find_bytes(data, SECURITY_TXT_BEGIN.as_bytes()) {
         Some(i) => i,
         None => return Err(SecurityTxtError::StartNotFound),

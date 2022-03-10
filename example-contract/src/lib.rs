@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use security_txt::security_txt;
+use solana_security_txt::security_txt;
 
 security_txt! {
     name: "Example",

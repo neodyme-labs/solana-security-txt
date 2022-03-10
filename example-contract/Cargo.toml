@@ -16,4 +16,4 @@ default = []
 
 [dependencies]
 anchor-lang = { version = "=0.22.1" }
-security-txt = { path = "../security-txt" }
+solana-security-txt = { path = "../security-txt" }

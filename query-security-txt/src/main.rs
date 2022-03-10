@@ -62,7 +62,7 @@ fn main() -> Result<()> {
     }
     let program_data = &program_data_account.data[offset..];
 
-    let security_txt = security_txt::parse_and_find(program_data)?;
+    let security_txt = solana_security_txt::find_and_parse(program_data)?;
     println!("{}", security_txt);
 
     Ok(())
