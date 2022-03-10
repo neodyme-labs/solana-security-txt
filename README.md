@@ -5,7 +5,7 @@ It is inspired by https://securitytxt.org/.
 
 Add the following to the `[dependencies]` section of your Cargo.toml:
 ```toml
-security-txt = 0.1.0
+security-txt = "0.1.0"
 ```
 
 ## Example
