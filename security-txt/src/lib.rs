@@ -5,7 +5,7 @@
 //!
 //! Add the following to the `[dependencies]` section of your Cargo.toml:
 //! ```toml
-//! security-txt = 0.1.0
+//! security-txt = "0.1.0"
 //! ```
 //!
 //! ## Example
@@ -45,7 +45,7 @@
 //! ## Format
 //! All values need to be string literals that may not contain nullbytes.
 //! Naive parsers may fail if the binary contains one of the security.txt delimiters anywhere else
-//! (`=======BEGIN SECURITY.TXT V1=======\0` and `"=======END SECURITY.TXT V1=======\0"`).
+//! (`=======BEGIN SECURITY.TXT V1=======\0` and `=======END SECURITY.TXT V1=======\0`).
 //!
 //! The following fields are supported, some of which are required for this to be considered a valid security.txt:
 //! - `name` (required): The name of the project.
@@ -57,6 +57,11 @@
 //! - `encryption` (optional): A PGP public key block (or similar) or a link to one
 //! - `acknowledgements` (optional): Either a link or a Markdown document containing acknowledgements to security researchers that have found vulnerabilities in the project in the past.
 //! - `policy` (required): Either a link or a Markdown document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.
+//!
+//! ## How it works
+//! The macro inserts a `&str` into the `.security.txt` section of the resulting ELF. Because of how Rust strings work, this is a tuple of a pointer to the actual string and the length.
+//!
+//! The string the macro builds begins with the start marker `=======BEGIN SECURITY.TXT V1=======\0`, and ends with the end marker `=======END SECURITY.TXT V1=======\0`. In between is a list of an even amount of strings, delimited by nullbytes. Every two strings form a key-value-pair.
 
 use core::fmt;
 use std::{collections::HashMap, fmt::Display};
