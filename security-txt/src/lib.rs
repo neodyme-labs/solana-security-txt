@@ -1,8 +1,15 @@
-//! The target of this macro is to provide easy-to-parse information to security researchers that wish to contact the authors of a smart contract.
+//! # security.txt
+//!
+//! This library defines a macro, which aim it is to provide easy-to-parse information to security researchers that wish to contact the authors of a Solana smart contract.
 //! It is inspired by https://securitytxt.org/.
 //!
-//! Example:
+//! Add the following to the `[dependencies]` section of your Cargo.toml:
+//! ```toml
+//! security-txt = 0.1.0
 //! ```
+//!
+//! ## Example
+//! ```rust
 //! security_txt! {
 //!     name: "Example",
 //!     project_url: "http://example.com",
@@ -29,15 +36,14 @@
 //! ",
 //!     acknowledgements: "
 //! The following hackers could've stolen all our money but didn't:
-//! - Anonymous
-//! - Russia
 //! - Neodyme
 //! ",
 //!     policy: "https://github.com/solana-labs/solana/blob/master/SECURITY.md"
 //! }
 //! ```
 //!
-//! All values need to be string literals that may not contain nulllbytes.
+//! ## Format
+//! All values need to be string literals that may not contain nullbytes.
 //! Naive parsers may fail if the binary contains one of the security.txt delimiters anywhere else
 //! (`=======BEGIN SECURITY.TXT V1=======\0` and `"=======END SECURITY.TXT V1=======\0"`).
 //!
@@ -47,7 +53,7 @@
 //! - `source_code` (optional): A URL to the project's source code.
 //! - `expiry` (optional): The date the security.txt will expire. The format is YYYY-MM-DD.
 //! - `preferred_languages` (required): A comma-separated list of preferred languages.
-//! - `contacts` (required): A comma-separated list of contact information in the format <contact type>:<contact information>. Possible contact types are email, discord, telegram, twitter link and other.
+//! - `contacts` (required): A comma-separated list of contact information in the format `<contact type>:<contact information>`. Possible contact types are `email`, `discord`, `telegram`, `twitter`, `link` and `other`.
 //! - `encryption` (optional): A PGP public key block (or similar) or a link to one
 //! - `acknowledgements` (optional): Either a link or a Markdown document containing acknowledgements to security researchers that have found vulnerabilities in the project in the past.
 //! - `policy` (required): Either a link or a Markdown document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.

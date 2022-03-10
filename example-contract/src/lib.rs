@@ -28,8 +28,6 @@ DAAKCRDyMVUMT0fjjlnQAQDFHUs6TIcxrNTtEZFjUFm1M0PJ1Dng/cDW4xN80fsn
 ",
     acknowledgements: "
 The following hackers could've stolen all our money but didn't:
-- Anonymous
-- Russia
 - Neodyme
 ",
     policy: "https://github.com/solana-labs/solana/blob/master/SECURITY.md"
