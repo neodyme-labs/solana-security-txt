@@ -10,6 +10,12 @@ Add the following to the `[dependencies]` section of your Cargo.toml:
 solana-security-txt = "0.1.1"
 ```
 
+To install the querying tool, execute
+```
+cargo install query-security-txt
+```
+
+
 ## Example
 ```rust
 security_txt! {
