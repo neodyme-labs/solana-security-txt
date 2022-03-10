@@ -2,11 +2,15 @@
 name = "query-security-txt"
 version = "0.1.0"
 edition = "2021"
+description = "query-security-txt is a tool that queries smart contracts on the Solana blockchain for security.txt information"
+readme = "../README.md"
+repository = "https://github.com/neodyme-labs/solana-security-txt"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 bincode = "1.3.3"
 clap = { version = "3.1.6", features = ["derive"] }
 color-eyre = "0.6.1"
-security-txt = { path = "../security-txt" }
+security-txt = { version = "0.1.0", path = "../security-txt" }
 solana-client = "1.10.0"
 solana-sdk = "1.10.0"
