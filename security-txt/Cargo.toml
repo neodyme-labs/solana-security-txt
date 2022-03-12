@@ -1,6 +1,6 @@
 [package]
 name = "solana-security-txt"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "security-txt is a macro that helps security researchers contact you about vulnerabilities in your smart contract"
 readme = "../README.md"

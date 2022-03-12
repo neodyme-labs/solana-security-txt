@@ -9,7 +9,7 @@ It is inspired by https://securitytxt.org/.
 
 Add the following to the `[dependencies]` section of your Cargo.toml:
 ```toml
-solana-security-txt = "0.1.1"
+solana-security-txt = "0.1.2"
 ```
 
 To install the querying tool, execute

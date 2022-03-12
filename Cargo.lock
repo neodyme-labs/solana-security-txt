@@ -2019,7 +2019,7 @@ dependencies = [
 
 [[package]]
 name = "query-security-txt"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "bincode",
  "clap 3.1.6",
@@ -3033,7 +3033,7 @@ dependencies = [
 
 [[package]]
 name = "solana-security-txt"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "thiserror",
  "twoway",
