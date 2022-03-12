@@ -1,3 +1,5 @@
+use std::{path::PathBuf, str::FromStr};
+
 use clap::Parser;
 use color_eyre::{eyre::eyre, Result};
 use solana_client::rpc_client::RpcClient;
@@ -12,8 +14,8 @@ struct Args {
     /// The rpc endpoint to connect to. Either a url or one of the following: [mainnet-beta (m), testnet (t), devnet (d), localhost (l)]
     url: String,
     #[clap()]
-    /// The program to query
-    program: Pubkey,
+    /// Either the pubkey of a program to query or the path to a file containing a compiled program
+    program: String,
 }
 
 fn main() -> Result<()> {
@@ -21,7 +23,26 @@ fn main() -> Result<()> {
 
     let args = Args::parse();
 
-    let url = match args.url.as_str() {
+    if let Ok(pubkey) = Pubkey::from_str(&args.program) {
+        query_remote(args.url.as_str(), pubkey)
+    } else if let Ok(file) = PathBuf::from_str(&args.program) {
+        query_local(file)
+    } else {
+        Err(eyre!("Program is neither a pubkey not a path"))
+    }
+}
+
+fn query_local(file: PathBuf) -> Result<()> {
+    let program_data = std::fs::read(file)?;
+
+    let security_txt = solana_security_txt::find_and_parse(&program_data)?;
+    println!("{}", security_txt);
+
+    Ok(())
+}
+
+fn query_remote(url: &str, pubkey: Pubkey) -> Result<()> {
+    let url = match url {
         "mainnet-beta" | "m" => "https://api.mainnet-beta.solana.com",
         "testnet" | "t" => "https://api.testnet.solana.com",
         "devnet" | "d" => "https://api.devnet.solana.com",
@@ -31,7 +52,7 @@ fn main() -> Result<()> {
     let client = RpcClient::new(url);
 
     let program_account = client
-        .get_account(&args.program)
+        .get_account(&pubkey)
         .map_err(|_| eyre!("Couldn't fetch program account"))?;
 
     if !bpf_loader_upgradeable::check_id(&program_account.owner) {
