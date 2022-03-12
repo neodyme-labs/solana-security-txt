@@ -99,6 +99,8 @@ pub enum SecurityTxtError {
     InvalidContact(String),
     #[error("Missing field: `{0}`")]
     MissingField(String),
+    #[error("Duplicate field: `{0}`")]
+    DuplicateField(String),
     #[error("Uneven amount of parts")]
     Uneven,
 }
@@ -222,11 +224,15 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
             attributes.insert(f.clone(), value.to_string());
             field = None;
         } else {
-            field = Some(
-                std::str::from_utf8(part)
+            field = Some({
+                let field = std::str::from_utf8(part)
                     .map_err(|_| SecurityTxtError::InvalidField(part.to_vec()))?
-                    .to_string(),
-            );
+                    .to_string();
+                if attributes.contains_key(&field) {
+                    return Err(SecurityTxtError::DuplicateField(field));
+                }
+                field
+            });
         }
     }
 
