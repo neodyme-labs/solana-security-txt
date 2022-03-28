@@ -269,7 +269,7 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
     let contacts = contacts?;
     let auditors: Vec<_> = attributes
         .remove("auditors")
-        .ok_or_else(|| SecurityTxtError::MissingField("auditors".to_string()))?
+        .unwrap_or_default()
         .split(",")
         .map(|s| s.trim().to_string())
         .collect();
