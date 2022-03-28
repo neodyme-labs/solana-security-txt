@@ -131,11 +131,10 @@ impl Display for Contact {
 
 impl Contact {
     pub fn from_str(s: &str) -> Result<Self, SecurityTxtError> {
-        let parts: Vec<_> = s.split(":").collect();
-        if parts.len() != 2 {
-            return Err(SecurityTxtError::InvalidContact(s.to_string()));
-        }
-        let (contact_type, contact_info) = (parts[0].trim(), parts[1].trim());
+        let (typ, value) = s
+            .split_once(":")
+            .ok_or_else(|| SecurityTxtError::InvalidContact(s.to_string()))?;
+        let (contact_type, contact_info) = (typ.trim(), value.trim());
         match contact_type.to_ascii_lowercase().as_str() {
             "email" => Ok(Contact::Email(contact_info.to_string())),
             "discord" => Ok(Contact::Discord(contact_info.to_string())),
