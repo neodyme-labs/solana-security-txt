@@ -9,6 +9,7 @@ security_txt! {
     expiry: "2042-01-01",
     preferred_languages: "en,de",
     contacts: "email:example@example.com,discord:example#1234",
+    auditors: "Neodyme",
     encryption: "
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Comment: Alice's OpenPGP certificate

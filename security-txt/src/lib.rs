@@ -12,6 +12,7 @@
 //!     expiry: "2042-01-01",
 //!     preferred_languages: "en,de",
 //!     contacts: "email:example@example.com,discord:example#1234",
+//!     auditors: "Neodyme",
 //!     encryption: "
 //! -----BEGIN PGP PUBLIC KEY BLOCK-----
 //! Comment: Alice's OpenPGP certificate
@@ -49,9 +50,10 @@
 //! - `expiry` (optional): The date the security.txt will expire. The format is YYYY-MM-DD.
 //! - `preferred_languages` (required): A comma-separated list of preferred languages.
 //! - `contacts` (required): A comma-separated list of contact information in the format `<contact type>:<contact information>`. Possible contact types are `email`, `discord`, `telegram`, `twitter`, `link` and `other`.
+//! - `auditors` (optional): A comma-separated list of people or entities that audited this smart contract. Note that this field is self-reported by the author of the program and might not be acurate.
 //! - `encryption` (optional): A PGP public key block (or similar) or a link to one
-//! - `acknowledgements` (optional): Either a link or a Markdown document containing acknowledgements to security researchers that have found vulnerabilities in the project in the past.
-//! - `policy` (required): Either a link or a Markdown document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.
+//! - `acknowledgements` (optional): Either a link or a text document containing acknowledgements to security researchers that have found vulnerabilities in the project in the past.
+//! - `policy` (required): Either a link or a text document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.
 //!
 //! ## How it works
 //! The macro inserts a `&str` into the `.security.txt` section of the resulting ELF. Because of how Rust strings work, this is a tuple of a pointer to the actual string and the length.
@@ -153,6 +155,7 @@ pub struct SecurityTxt {
     pub expiry: Option<String>,
     pub preferred_languages: Vec<String>,
     pub contacts: Vec<Contact>,
+    pub auditors: Vec<String>,
     pub encryption: Option<String>,
     pub acknowledgements: Option<String>,
     pub policy: String,
@@ -193,6 +196,13 @@ impl Display for SecurityTxt {
         if let Some(acknowledegments) = &self.acknowledgements {
             writeln!(f, "\nAcknowledgements:")?;
             writeln!(f, "{}", acknowledegments)?;
+        }
+
+        if !self.auditors.is_empty() {
+            writeln!(f, "\nAuditors:")?;
+            for auditor in &self.auditors {
+                writeln!(f, "  {}", auditor)?;
+            }
         }
 
         writeln!(f, "\nPolicy:")?;
@@ -257,6 +267,12 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
         .map(|s| Contact::from_str(s.trim()))
         .collect();
     let contacts = contacts?;
+    let auditors: Vec<_> = attributes
+        .remove("auditors")
+        .ok_or_else(|| SecurityTxtError::MissingField("auditors".to_string()))?
+        .split(",")
+        .map(|s| s.trim().to_string())
+        .collect();
     let encryption = attributes.remove("encryption");
     let acknowledgements = attributes.remove("acknowledgements");
     let policy = attributes
@@ -276,6 +292,7 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
         expiry,
         preferred_languages,
         contacts,
+        auditors,
         encryption,
         acknowledgements,
         policy,
