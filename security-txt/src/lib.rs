@@ -34,7 +34,7 @@
 //! =iIGO
 //! -----END PGP PUBLIC KEY BLOCK-----
 //! ",
-//!     auditors: "Neodyme",
+//!     auditors: "None",
 //!     acknowledgements: "
 //! The following hackers could've stolen all our money but didn't:
 //! - Neodyme
@@ -53,7 +53,7 @@
 //! |-----------------------|:--------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 //! | **`name`**            |   string (required)  | The name of the project. If the project isn't public, you can put `private`.                                                                                                                                                    |
 //! | **`project_url`**     | https url (required) | A URL to the project's homepage/dapp. If the project isn't public, you can put `private`.                                                                                                                                       |
-//! | **`contacts`**        |    list (required)   | A comma-separated list of contact information in the format `:`. Should roughly be ordered in preference. Possible contact types are `email`, `link`, `discord`, `telegram`, `twitter` and `other`.                             |
+//! | **`contacts`**        |    list (required)   | A comma-separated list of contact information in the format `<contact type>:<contact information>`. Should roughly be ordered in preference. Possible contact types are `email`, `link`, `discord`, `telegram`, `twitter` and `other`.                             |
 //! | **`policy`**          | link/text (required) | Either a link or a text document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.                                             |
 //! | `preferred_languages` |    list (optional)   | A comma-separated list of preferred languages (ISO 639-1).                                                                                                                                                                      |
 //! | `source_code`         |    link (optional)   | A URL to the project's source code.                                                                                                                                                                                             |

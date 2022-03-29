@@ -29,7 +29,7 @@ DAAKCRDyMVUMT0fjjlnQAQDFHUs6TIcxrNTtEZFjUFm1M0PJ1Dng/cDW4xN80fsn
 =iIGO
 -----END PGP PUBLIC KEY BLOCK-----
 ",
-    auditors: "Neodyme",
+    auditors: "None",
     acknowledgements: "
 The following hackers could've stolen all our money but didn't:
 - Neodyme
