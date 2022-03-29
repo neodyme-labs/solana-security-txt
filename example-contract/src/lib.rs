@@ -3,13 +3,15 @@ use anchor_lang::prelude::*;
 use solana_security_txt::security_txt;
 
 security_txt! {
+    // Required fields
     name: "Example",
     project_url: "http://example.com",
-    source_code: "https://github.com/example/example",
-    expiry: "2042-01-01",
+    contacts: "email:example@example.com,link:https://example.com/security,discord:example#1234",
+    policy: "https://github.com/solana-labs/solana/blob/master/SECURITY.md",
+
+    // Optional Fields
     preferred_languages: "en,de",
-    contacts: "email:example@example.com,discord:example#1234",
-    auditors: "Neodyme",
+    source_code: "https://github.com/example/example",
     encryption: "
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Comment: Alice's OpenPGP certificate
@@ -27,11 +29,11 @@ DAAKCRDyMVUMT0fjjlnQAQDFHUs6TIcxrNTtEZFjUFm1M0PJ1Dng/cDW4xN80fsn
 =iIGO
 -----END PGP PUBLIC KEY BLOCK-----
 ",
+    auditors: "Neodyme",
     acknowledgements: "
 The following hackers could've stolen all our money but didn't:
 - Neodyme
-",
-    policy: "https://github.com/solana-labs/solana/blob/master/SECURITY.md"
+"
 }
 
 declare_id!("H6EoGSe3xgMEsnjg8ADcXb5B8GF4gJXEesQhyMFz4ZxR");
