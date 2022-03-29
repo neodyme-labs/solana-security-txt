@@ -46,11 +46,14 @@ query-security-txt target/bpfel-unknown-unknown/release/example_contract.so
 ### Example
 ```rust
 security_txt! {
+    // Required fields
     name: "Example",
     project_url: "http://example.com",
     contacts: "email:example@example.com,link:https://example.com/security,discord:example#1234",
-    preferred_languages: "en,de",
     policy: "https://github.com/solana-labs/solana/blob/master/SECURITY.md",
+
+    // Optional Fields
+    preferred_languages: "en,de",
     source_code: "https://github.com/example/example",
     encryption: "
 -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -73,10 +76,29 @@ DAAKCRDyMVUMT0fjjlnQAQDFHUs6TIcxrNTtEZFjUFm1M0PJ1Dng/cDW4xN80fsn
     acknowledgements: "
 The following hackers could've stolen all our money but didn't:
 - Neodyme
-",
-    expiry: "2042-01-01"
+"
 }
 ```
+
+### Example Policies
+
+Bug bounty policies can be a bit daunting to write. For a good and thorough example, take a look at Solana Foundation's [SECURITY.md](https://github.com/solana-labs/solana/blob/master/SECURITY.md). But even a very brief policy is better than none. A starting point might be something like:
+
+> We pay a bug bounty at our discretion after verifying the bug, up to 10% of value at risk, limited by a maximum of $x. This bounty is only paid out if details about the security issues have not been provided to third parties before a fix has been introduced and verified. Furthermore, the reporter is in no way allowed to exploit the issue without our explicit consent.
+
+If you don't pay bounties, which might be sensible for toy projects that don't handle much value, you can also put something like
+
+> We do not pay a bug bounty.
+
+For more inspiration, take a look at how other large Solana projects structure their policies (random, non-exhaustive collection):
+- https://github.com/solana-labs/solana/security/policy
+- https://forum.projectserum.com/t/formalizing-a-bug-bounty-program/410
+- https://docs.marinade.finance/developers/bug-bounty
+- https://docs.solend.fi/protocol/bug-bounty
+- https://github.com/certusone/wormhole/blob/dev.v2/ImmuneFi%20bug-bounty.md
+- https://immunefi.com/bounty/lido/ 
+- https://docs.mango.markets/mango/bug-bounty
+
 
 ## Format
 
@@ -93,8 +115,8 @@ The following fields are supported, some of which are required for this to be co
 | **`name`**            |   string (required)  | The name of the project. If the project isn't public, you can put `private`.                                                                                                                                                    |
 | **`project_url`**     | https url (required) | A URL to the project's homepage/dapp. If the project isn't public, you can put `private`.                                                                                                                                       |
 | **`contacts`**        |    list (required)   | A comma-separated list of contact information in the format `:`. Should roughly be ordered in preference. Possible contact types are `email`, `link`, `discord`, `telegram`, `twitter` and `other`.                             |
-| `preferred_languages` |    list (optional)   | A comma-separated list of preferred languages.                                                                                                                                                                                  |
-| `policy`              | link/text (optional) | Either a link or a text document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.                                             |
+| **`policy`**          | link/text (required) | Either a link or a text document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.                                             |
+| `preferred_languages` |    list (optional)   | A comma-separated list of preferred languages (ISO 639-1).                                                                                                                                                                      |
 | `source_code`         |    link (optional)   | A URL to the project's source code.                                                                                                                                                                                             |
 | `encryption`          | link/text (optional) | A PGP public key block (or similar) or a link to one.                                                                                                                                                                           |
 | `auditors`            | link/list (optional) | A comma-separated list of people or entities that audited this smart contract, or a link to a page where audit reports are hosted. Note that this field is self-reported by the author of the program and might not be acurate. |
@@ -102,9 +124,9 @@ The following fields are supported, some of which are required for this to be co
 | `expiry`              |    date (optional)   | The date the security.txt will expire. The format is YYYY-MM-DD.                                                                                                                                                                |
 
 ## Security of this Crate
-To minimize dependencies, the security.txt parser is disabled by default, and will only be build when the feature `parser` is set.
+To minimize dependencies, the security.txt parser is disabled by default, and will only be build if the feature `parser` is set.
 
-Literally all this crate does is defining a single macro:
+Literally all this crate does is define a single macro:
 
 ```rust
 #[macro_export]

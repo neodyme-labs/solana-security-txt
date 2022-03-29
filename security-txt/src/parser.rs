@@ -30,28 +30,20 @@ impl Display for Contact {
 pub struct SecurityTxt {
     pub name: String,
     pub project_url: String,
-    pub source_code: Option<String>,
-    pub expiry: Option<String>,
-    pub preferred_languages: Vec<String>,
     pub contacts: Vec<Contact>,
-    pub auditors: Vec<String>,
-    pub encryption: Option<String>,
-    pub acknowledgements: Option<String>,
     pub policy: String,
+    pub preferred_languages: Vec<String>,
+    pub source_code: Option<String>,
+    pub encryption: Option<String>,
+    pub auditors: Vec<String>,
+    pub acknowledgements: Option<String>,
+    pub expiry: Option<String>,
 }
 
 impl Display for SecurityTxt {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "Name: {}", self.name)?;
         writeln!(f, "Project URL: {}", self.project_url)?;
-
-        if let Some(expiry) = &self.expiry {
-            writeln!(f, "Expires at: {}", expiry)?;
-        }
-
-        if let Some(source_code) = &self.source_code {
-            writeln!(f, "Source code: {}", source_code)?;
-        }
 
         if !self.contacts.is_empty() {
             writeln!(f, "\nContacts:")?;
@@ -60,6 +52,9 @@ impl Display for SecurityTxt {
             }
         }
 
+        writeln!(f, "\nPolicy:")?;
+        writeln!(f, "{}", self.policy)?;
+
         if !self.preferred_languages.is_empty() {
             writeln!(f, "\nPreferred Languages:")?;
             for languages in &self.preferred_languages {
@@ -67,14 +62,13 @@ impl Display for SecurityTxt {
             }
         }
 
+        if let Some(source_code) = &self.source_code {
+            writeln!(f, "Source code: {}", source_code)?;
+        }
+
         if let Some(encryption) = &self.encryption {
             writeln!(f, "\nEncryption:")?;
             writeln!(f, "{}", encryption)?;
-        }
-
-        if let Some(acknowledegments) = &self.acknowledgements {
-            writeln!(f, "\nAcknowledgements:")?;
-            writeln!(f, "{}", acknowledegments)?;
         }
 
         if !self.auditors.is_empty() {
@@ -84,9 +78,14 @@ impl Display for SecurityTxt {
             }
         }
 
-        writeln!(f, "\nPolicy:")?;
-        writeln!(f, "{}", self.policy)?;
+        if let Some(acknowledegments) = &self.acknowledgements {
+            writeln!(f, "\nAcknowledgements:")?;
+            writeln!(f, "{}", acknowledegments)?;
+        }
 
+        if let Some(expiry) = &self.expiry {
+            writeln!(f, "Expires at: {}", expiry)?;
+        }
         Ok(())
     }
 }
@@ -174,10 +173,10 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
         .ok_or_else(|| SecurityTxtError::MissingField("project_url".to_string()))?;
     let source_code = attributes.remove("source_code");
     let expiry = attributes.remove("expiry");
-    let preferred_languages: Vec<_> = attributes
+    let preferred_languages = attributes
         .remove("preferred_languages")
-        .ok_or_else(|| SecurityTxtError::MissingField("preferred_languages".to_string()))?
-        .split(',')
+        .unwrap_or_default()
+        .split(",")
         .map(|s| s.trim().to_string())
         .collect();
     let contacts: Result<Vec<_>, SecurityTxtError> = attributes

@@ -1,20 +1,22 @@
 //! # security.txt
 //!
 //! This library defines a macro, whose aim it is to provide easy-to-parse information to security researchers that wish to contact the authors of a Solana smart contract.
-//! It is inspired by https://securitytxt.org/.
+//! It is inspired by <https://securitytxt.org/>.
 //! 
 //! For more info, take a look at the projects [README.md](https://github.com/neodyme-labs/solana-security-txt/)
 //!
 //! ## Example
 //! ```rust
 //! security_txt! {
+//!     // Required fields
 //!     name: "Example",
 //!     project_url: "http://example.com",
-//!     source_code: "https://github.com/example/example",
-//!     expiry: "2042-01-01",
+//!     contacts: "email:example@example.com,link:https://example.com/security,discord:example#1234",
+//!     policy: "https://github.com/solana-labs/solana/blob/master/SECURITY.md",
+//! 
+//!     // Optional Fields
 //!     preferred_languages: "en,de",
-//!     contacts: "email:example@example.com,discord:example#1234",
-//!     auditors: "Neodyme",
+//!     source_code: "https://github.com/example/example",
 //!     encryption: "
 //! -----BEGIN PGP PUBLIC KEY BLOCK-----
 //! Comment: Alice's OpenPGP certificate
@@ -32,11 +34,11 @@
 //! =iIGO
 //! -----END PGP PUBLIC KEY BLOCK-----
 //! ",
+//!     auditors: "Neodyme",
 //!     acknowledgements: "
 //! The following hackers could've stolen all our money but didn't:
 //! - Neodyme
-//! ",
-//!     policy: "https://github.com/solana-labs/solana/blob/master/SECURITY.md"
+//! "
 //! }
 //! ```
 //!
@@ -46,16 +48,19 @@
 //! (`=======BEGIN SECURITY.TXT V1=======\0` and `=======END SECURITY.TXT V1=======\0`).
 //!
 //! The following fields are supported, some of which are required for this to be considered a valid security.txt:
-//! - `name` (required): The name of the project. If the project isn't public, you can put `private`.
-//! - `project_url` (required): A URL to the project's homepage/dapp. If the project isn't public, you can put `private`.
-//! - `source_code` (optional): A URL to the project's source code.
-//! - `expiry` (optional): The date the security.txt will expire. The format is YYYY-MM-DD.
-//! - `preferred_languages` (required): A comma-separated list of preferred languages.
-//! - `contacts` (required): A comma-separated list of contact information in the format `<contact type>:<contact information>`. Possible contact types are `email`, `discord`, `telegram`, `twitter`, `link` and `other`.
-//! - `auditors` (optional): A comma-separated list of people or entities that audited this smart contract. Note that this field is self-reported by the author of the program and might not be acurate.
-//! - `encryption` (optional): A PGP public key block (or similar) or a link to one
-//! - `acknowledgements` (optional): Either a link or a text document containing acknowledgements to security researchers who have previously found vulnerabilities in the project.
-//! - `policy` (required): Either a link or a text document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.
+//! 
+//! | Field                 |         Type         | Description                                                                                                                                                                                                                     |
+//! |-----------------------|:--------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+//! | **`name`**            |   string (required)  | The name of the project. If the project isn't public, you can put `private`.                                                                                                                                                    |
+//! | **`project_url`**     | https url (required) | A URL to the project's homepage/dapp. If the project isn't public, you can put `private`.                                                                                                                                       |
+//! | **`contacts`**        |    list (required)   | A comma-separated list of contact information in the format `:`. Should roughly be ordered in preference. Possible contact types are `email`, `link`, `discord`, `telegram`, `twitter` and `other`.                             |
+//! | **`policy`**          | link/text (required) | Either a link or a text document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.                                             |
+//! | `preferred_languages` |    list (optional)   | A comma-separated list of preferred languages (ISO 639-1).                                                                                                                                                                      |
+//! | `source_code`         |    link (optional)   | A URL to the project's source code.                                                                                                                                                                                             |
+//! | `encryption`          | link/text (optional) | A PGP public key block (or similar) or a link to one.                                                                                                                                                                           |
+//! | `auditors`            | link/list (optional) | A comma-separated list of people or entities that audited this smart contract, or a link to a page where audit reports are hosted. Note that this field is self-reported by the author of the program and might not be acurate. |
+//! | `acknowledgements`    | link/text (optional) | Either a link or a text document containing acknowledgements to security researchers who have previously found vulnerabilities in the project.                                                                                  |
+//! | `expiry`              |    date (optional)   | The date the security.txt will expire. The format is YYYY-MM-DD.                                                                                                                                                                |
 //!
 //! ## How it works
 //! The macro inserts a `&str` into the `.security.txt` section of the resulting ELF. Because of how Rust strings work, this is a tuple of a pointer to the actual string and the length.
