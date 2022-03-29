@@ -2,6 +2,8 @@
 //!
 //! This library defines a macro, whose aim it is to provide easy-to-parse information to security researchers that wish to contact the authors of a Solana smart contract.
 //! It is inspired by https://securitytxt.org/.
+//! 
+//! For more info, take a look at the projects [README.md](https://github.com/neodyme-labs/solana-security-txt/)
 //!
 //! ## Example
 //! ```rust
@@ -44,15 +46,15 @@
 //! (`=======BEGIN SECURITY.TXT V1=======\0` and `=======END SECURITY.TXT V1=======\0`).
 //!
 //! The following fields are supported, some of which are required for this to be considered a valid security.txt:
-//! - `name` (required): The name of the project.
-//! -  `project_url` (required): A URL to the project's homepage/dapp.
+//! - `name` (required): The name of the project. If the project isn't public, you can put `private`.
+//! - `project_url` (required): A URL to the project's homepage/dapp. If the project isn't public, you can put `private`.
 //! - `source_code` (optional): A URL to the project's source code.
 //! - `expiry` (optional): The date the security.txt will expire. The format is YYYY-MM-DD.
 //! - `preferred_languages` (required): A comma-separated list of preferred languages.
 //! - `contacts` (required): A comma-separated list of contact information in the format `<contact type>:<contact information>`. Possible contact types are `email`, `discord`, `telegram`, `twitter`, `link` and `other`.
 //! - `auditors` (optional): A comma-separated list of people or entities that audited this smart contract. Note that this field is self-reported by the author of the program and might not be acurate.
 //! - `encryption` (optional): A PGP public key block (or similar) or a link to one
-//! - `acknowledgements` (optional): Either a link or a text document containing acknowledgements to security researchers that have found vulnerabilities in the project in the past.
+//! - `acknowledgements` (optional): Either a link or a text document containing acknowledgements to security researchers who have previously found vulnerabilities in the project.
 //! - `policy` (required): Either a link or a text document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.
 //!
 //! ## How it works

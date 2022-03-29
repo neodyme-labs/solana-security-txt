@@ -7,36 +7,17 @@
 This library defines a macro, which allows developers to provide easy-to-parse information to security researchers that wish to contact the authors of a Solana smart contract.
 It is inspired by https://securitytxt.org/.
 
+
 ## Motivation
 
 Users typically interact with a Solana smart contract via the project's web interface, which knows the contract's address. Security researchers often don't.
 
-Especially for smaller projects, identifying a project from just the contract's address is hard and time-consuming, if not impossible.
+Especially for smaller or private projects, identification from just the contract's address is hard and time-consuming, if not impossible.
 This slows down or prevents bug reports from reaching the developers.
 
 Having standardized information about your project inside your contract makes it easy for whitehat researchers to reach you if they find any problems.
 
-
-## Format
-
-This crates uses a macro to construct one long security.txt string. It begins with the start marker `=======BEGIN SECURITY.TXT V1=======\0`, and ends with the end marker `=======END SECURITY.TXT V1=======\0`.
-In between is a list of strings, delimited by nullbytes. Every pair of two strings forms a key-value pair.
-
-All values need to be string literals that may not contain nullbytes.
-
-The following fields are supported, some of which are required for this to be considered a valid security.txt:
-- `name` (required): The name of the project.
-- `project_url` (required): A URL to the project's homepage/dapp.
-- `source_code` (optional): A URL to the project's source code.
-- `expiry` (optional): The date the security.txt will expire. The format is YYYY-MM-DD.
-- `preferred_languages` (required): A comma-separated list of preferred languages.
-- `contacts` (required): A comma-separated list of contact information in the format `<contact type>:<contact information>`. Possible contact types are `email`, `discord`, `telegram`, `twitter`, `link` and `other`.
-- `auditors` (optional): A comma-separated list of people or entities that audited this smart contract. Note that this field is self-reported by the author of the program and might not be acurate.
-- `encryption` (optional): A PGP public key block (or similar) or a link to one
-- `acknowledgments` (optional): Either a link or a text document containing acknowledgments to security researchers who have previously found vulnerabilities in the project.
-- `policy` (required): Either a link or a text document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.
-
-Naive parsers may fail if the binary contains one of the security.txt markers anywhere else.
+To maximize compatibility with existing deployment setups, multisigs and DAOs, this security.txt is implemented to simply be a part of your program rather than an external contract.
 
 ## Usage
 
@@ -50,23 +31,27 @@ To install the querying tool, execute
 cargo install query-security-txt
 ```
 
-In general, there are two ways to specify the information. Either directly inside the contract to store it on-chain or by linking to a web page.
-The former has the advantage that it is easy to set up but has the drawback that any changes require a program upgrade. Program upgrades shouldn't be done lightly.
+In general, there are two ways to specify the information. Either directly inside the contract to store it on-chain or by linking to a web page. The former has the advantage that it is easy to set up but has the drawback that any changes require a program upgrade. Program upgrades shouldn't be done lightly.
 
-Therefore it is recommended to link to all relevant information that might change instead of hardcoding it on-chain.
+Therefore **it is recommended to have all information you expect to change on a website, which you can then link to inside the security.txt**.
 
-As many projects are best reachable via Telegram or Discord there is native support for these contact methods. But be aware that handles might change, for example, if you change your Discord username. 
+As many projects are best reachable via Telegram or Discord there is native support for these contact methods. But be aware that handles might change, for example, if you change your Discord username.
+
+The `security_txt` macro is intentionally kept brief. As such, it doesn't do any input validation. For optimal experience, **please verify the format before uploading the contract to the chain.** This can be done with the provided `query-security-txt` program, which can not only be called with on-chain contracts but also local binaries:
+
+```sh
+query-security-txt target/bpfel-unknown-unknown/release/example_contract.so
+```
 
 ### Example
 ```rust
 security_txt! {
     name: "Example",
     project_url: "http://example.com",
-    source_code: "https://github.com/example/example",
-    expiry: "2042-01-01",
+    contacts: "email:example@example.com,link:https://example.com/security,discord:example#1234",
     preferred_languages: "en,de",
-    contacts: "email:example@example.com,discord:example#1234",
-    auditors: "Neodyme",
+    policy: "https://github.com/solana-labs/solana/blob/master/SECURITY.md",
+    source_code: "https://github.com/example/example",
     encryption: "
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Comment: Alice's OpenPGP certificate
@@ -84,19 +69,83 @@ DAAKCRDyMVUMT0fjjlnQAQDFHUs6TIcxrNTtEZFjUFm1M0PJ1Dng/cDW4xN80fsn
 =iIGO
 -----END PGP PUBLIC KEY BLOCK-----
 ",
-    acknowledgments: "
+    auditors: "Neodyme",
+    acknowledgements: "
 The following hackers could've stolen all our money but didn't:
 - Neodyme
 ",
-    policy: "https://github.com/solana-labs/solana/blob/master/SECURITY.md"
+    expiry: "2042-01-01"
 }
 ```
 
+## Format
 
-## Additional ELF Section
+This crates uses a macro to construct one long security.txt string. It begins with the start marker `=======BEGIN SECURITY.TXT V1=======\0`, and ends with the end marker `=======END SECURITY.TXT V1=======\0`.
+In between is a list of strings, delimited by nullbytes. Every pair of two strings forms a key-value pair.
 
-In addition to inserting the security.txt string into the binary, the macro creates a new `.security.txt` ELF section. Because of how Rust strings work, it is not easily possible to place the entire string in a separate ELF section, so this is simply a tuple of a pointer to the actual string and its length.
+All values need to be string literals that may not contain nullbytes.
+The contract should not include the security.txt markers anywhere else, otherwise naive parsers might fail.
+
+The following fields are supported, some of which are required for this to be considered a valid security.txt:
+
+| Field                 |         Type         | Description                                                                                                                                                                                                                     |
+|-----------------------|:--------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **`name`**            |   string (required)  | The name of the project. If the project isn't public, you can put `private`.                                                                                                                                                    |
+| **`project_url`**     | https url (required) | A URL to the project's homepage/dapp. If the project isn't public, you can put `private`.                                                                                                                                       |
+| **`contacts`**        |    list (required)   | A comma-separated list of contact information in the format `:`. Should roughly be ordered in preference. Possible contact types are `email`, `link`, `discord`, `telegram`, `twitter` and `other`.                             |
+| `preferred_languages` |    list (optional)   | A comma-separated list of preferred languages.                                                                                                                                                                                  |
+| `policy`              | link/text (optional) | Either a link or a text document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.                                             |
+| `source_code`         |    link (optional)   | A URL to the project's source code.                                                                                                                                                                                             |
+| `encryption`          | link/text (optional) | A PGP public key block (or similar) or a link to one.                                                                                                                                                                           |
+| `auditors`            | link/list (optional) | A comma-separated list of people or entities that audited this smart contract, or a link to a page where audit reports are hosted. Note that this field is self-reported by the author of the program and might not be acurate. |
+| `acknowledgements`    | link/text (optional) | Either a link or a text document containing acknowledgements to security researchers who have previously found vulnerabilities in the project.                                                                                  |
+| `expiry`              |    date (optional)   | The date the security.txt will expire. The format is YYYY-MM-DD.                                                                                                                                                                |
+
+## Security of this Crate
+To minimize dependencies, the security.txt parser is disabled by default, and will only be build when the feature `parser` is set.
+
+Literally all this crate does is defining a single macro:
+
+```rust
+#[macro_export]
+macro_rules! security_txt {
+    ($($name:ident: $value:expr),*) => {
+        #[allow(dead_code)]
+        #[no_mangle]
+        #[link_section = ".security.txt"]
+        pub static security_txt: &str = concat! {
+            "=======BEGIN SECURITY.TXT V1=======\0",
+            $(stringify!($name), "\0", $value, "\0",)*
+            "=======END SECURITY.TXT V1=======\0"
+        };
+    };
+}
+```
+
+If you want, you can just copy this into your contract instead of depending on this crate.
+
+Should you notice any errors, please don't hesistate to open an issue, or in critical cases reach us under `contact@neodyme.io`.
+
+### Additional ELF Section
+
+In addition to inserting the security.txt string into the binary, the macro creates a new `.security.txt` ELF section via the `#[link_section]` attribute. Because of how Rust strings work, it is not easily possible to place the entire string in a separate ELF section, so this is simply a tuple of a pointer to the actual string and its length.
 
 ELF-aware parsers can thus simply look at this section and are not required to search the haystack for the security.txt markers.
 
 Since Solana may move away from ELF binaries in the future, this section is optional in the standard.
+
+## License
+
+Licensed under either of
+
+ * Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
+ * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+
+at your option.
+
+### Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally
+submitted for inclusion in the work by you, as defined in the Apache-2.0
+license, shall be dual licensed as above, without any additional terms or
+conditions.
