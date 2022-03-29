@@ -1,6 +1,6 @@
 [package]
 name = "solana-security-txt"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 description = "security-txt is a macro that helps security researchers contact you about vulnerabilities in your smart contract"
 readme = "../README.md"
@@ -12,5 +12,5 @@ license = "MIT OR Apache-2.0"
 parser = ["thiserror", "twoway"]
 
 [dependencies]
-thiserror = {version = "=1.0.30", optional = true}
-twoway = {version = "=0.2.2", optional = true}
+thiserror = { version = "=1.0.30", optional = true }
+twoway = { version = "=0.2.2", optional = true }
