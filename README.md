@@ -124,7 +124,7 @@ The following fields are supported, some of which are required for this to be co
 | `expiry`              |   date (optional)    | The date the security.txt will expire. The format is YYYY-MM-DD.                                                                                                                                                                |
 
 ## Security of this Crate
-To minimize dependencies, the security.txt parser is disabled by default, and will only be build if the feature `parser` is set.
+To minimize dependencies, the security.txt parser is disabled by default, and will only be built if the feature `parser` is set.
 
 Literally all this crate does is define a single macro:
 
