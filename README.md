@@ -2,6 +2,8 @@
 
 [![](https://img.shields.io/crates/v/solana-security-txt)](https://crates.io/crates/solana-security-txt) [![](https://docs.rs/solana-security-txt/badge.svg)](https://docs.rs/solana-security-txt/) 
 
+[![](https://img.shields.io/crates/v/query-security-txt)](https://crates.io/crates/query-security-txt)
+
 This library defines a macro, which allows developers to provide easy-to-parse information to security researchers that wish to contact the authors of a Solana smart contract.
 It is inspired by https://securitytxt.org/.
 
