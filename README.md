@@ -7,6 +7,8 @@
 This library defines a macro, which allows developers to provide easy-to-parse information to security researchers that wish to contact the authors of a Solana smart contract.
 It is inspired by https://securitytxt.org/.
 
+See the an example in the Solana Explorer: https://explorer.solana.com/address/HPxKXnBN4vJ8RjpdqDCU7gvNQHeeyGnSviYTJ4fBrDt4/security?cluster=devnet
+
 
 ## Motivation
 
@@ -44,6 +46,7 @@ query-security-txt target/bpfel-unknown-unknown/release/example_contract.so
 ```
 
 ### Example
+
 ```rust
 security_txt! {
     // Required fields
