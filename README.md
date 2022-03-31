@@ -31,9 +31,9 @@ To install the querying tool, execute
 cargo install query-security-txt
 ```
 
-In general, there are two ways to specify the information. Either directly inside the contract to store it on-chain or by linking to a web page. The former has the advantage that it is easy to set up but has the drawback that any changes require a program upgrade. Program upgrades shouldn't be done lightly.
+In general, there are two ways to specify the information. Either directly inside the contract to store it on-chain or by linking to a web page. The former has the advantage that it is easy to set up, but has the drawback that any changes require a program upgrade. Program upgrades shouldn't be done lightly.
 
-Therefore **it is recommended to have all information you expect to change on a website, which you can then link to inside the security.txt**.
+Therefore, **it is recommended to have all information you expect to change on a website, which you can then link to inside the security.txt**.
 
 As many projects are best reachable via Telegram or Discord there is native support for these contact methods. But be aware that handles might change, for example, if you change your Discord username.
 
@@ -102,7 +102,7 @@ For more inspiration, take a look at how other large Solana projects structure t
 
 ## Format
 
-This crates uses a macro to construct one long security.txt string. It begins with the start marker `=======BEGIN SECURITY.TXT V1=======\0`, and ends with the end marker `=======END SECURITY.TXT V1=======\0`.
+This crate uses a macro to construct one long security.txt string. It begins with the start marker `=======BEGIN SECURITY.TXT V1=======\0`, and ends with the end marker `=======END SECURITY.TXT V1=======\0`.
 In between is a list of strings, delimited by nullbytes. Every pair of two strings forms a key-value pair.
 
 All values need to be string literals that may not contain nullbytes.
@@ -119,7 +119,7 @@ The following fields are supported, some of which are required for this to be co
 | `preferred_languages` |   list (optional)    | A comma-separated list of preferred languages (ISO 639-1).                                                                                                                                                                      |
 | `source_code`         |   link (optional)    | A URL to the project's source code.                                                                                                                                                                                             |
 | `encryption`          | link/text (optional) | A PGP public key block (or similar) or a link to one.                                                                                                                                                                           |
-| `auditors`            | link/list (optional) | A comma-separated list of people or entities that audited this smart contract, or a link to a page where audit reports are hosted. Note that this field is self-reported by the author of the program and might not be acurate. |
+| `auditors`            | link/list (optional) | A comma-separated list of people or entities that audited this smart contract, or a link to a page where audit reports are hosted. Note that this field is self-reported by the author of the program and might not be accurate. |
 | `acknowledgements`    | link/text (optional) | Either a link or a text document containing acknowledgements to security researchers who have previously found vulnerabilities in the project.                                                                                  |
 | `expiry`              |   date (optional)    | The date the security.txt will expire. The format is YYYY-MM-DD.                                                                                                                                                                |
 
@@ -146,7 +146,7 @@ macro_rules! security_txt {
 
 If you want, you can just copy this into your contract instead of depending on this crate.
 
-Should you notice any errors, please don't hesistate to open an issue, or in critical cases reach us under `contact@neodyme.io`.
+Should you notice any errors, please don't hesitate to open an issue, or in critical cases reach us under `contact@neodyme.io`.
 
 ### Additional ELF Section
 
