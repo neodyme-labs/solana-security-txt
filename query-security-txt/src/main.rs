@@ -28,7 +28,7 @@ fn main() -> Result<()> {
     } else if let Ok(file) = PathBuf::from_str(&args.program) {
         query_local(file)
     } else {
-        Err(eyre!("Program is neither a pubkey not a path"))
+        Err(eyre!("Program is neither a pubkey nor a path"))
     }
 }
 
