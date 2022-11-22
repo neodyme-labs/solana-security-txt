@@ -44,6 +44,7 @@
 //! ### Example
 //!
 //! ```rust
+//! #[cfg(not(feature = "no-entrypoint"))]
 //! security_txt! {
 //!     // Required fields
 //!     name: "Example",
