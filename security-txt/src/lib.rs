@@ -3,7 +3,7 @@
 //! This library defines a macro, which allows developers to provide easy-to-parse information to security researchers that wish to contact the authors of a Solana smart contract.
 //! It is inspired by https://securitytxt.org/.
 //!
-//! See the an example in the Solana Explorer: https://explorer.solana.com/address/HPxKXnBN4vJ8RjpdqDCU7gvNQHeeyGnSviYTJ4fBrDt4/security?cluster=devnet
+//! See this example in the Solana Explorer: https://explorer.solana.com/address/HPxKXnBN4vJ8RjpdqDCU7gvNQHeeyGnSviYTJ4fBrDt4/security?cluster=devnet
 //!
 //!
 //! ## Motivation
@@ -21,7 +21,7 @@
 //!
 //! Add the following to the `[dependencies]` section of your Cargo.toml:
 //! ```toml
-//! solana-security-txt = "1.0.1"
+//! solana-security-txt = "1.0.2"
 //! ```
 //!
 //! To install the querying tool, execute
@@ -39,6 +39,21 @@
 //!
 //! ```sh
 //! query-security-txt target/bpfel-unknown-unknown/release/example_contract.so
+//! ```
+//!
+//! #### Notice for library authors
+//! If you expect your contract to be used as a dependency in other contracts, you **must** exclude the macro when your
+//! contract is being built as a library, i.e., when the `no-entrypoint` feature is being used.
+//! Consult the example snippet below or the full example in the `example-contract` directory for details.
+//!
+//! #### Troubleshooting: linker error `multiple definition of security_txt`
+//! If you encounter this error during building, then that means that the `security_txt` macro has been used multiple times.
+//! This is probably caused by one of your dependencies also using the macro, which causes a name conflict during building.
+//!
+//! In that case, please tell the authors of that dependency to read the above notice for library authors and add the
+//! following to the macro to exclude it from `no-entrypoint` builds.
+//! ```rust
+//! #[cfg(not(feature = "no-entrypoint"))]
 //! ```
 //!
 //! ### Example
