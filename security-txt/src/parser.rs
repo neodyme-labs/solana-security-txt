@@ -181,12 +181,8 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
         .remove("project_url")
         .ok_or_else(|| SecurityTxtError::MissingField("project_url".to_string()))?;
     let source_code = attributes.remove("source_code");
-    let source_release = attributes
-        .remove("source_release")
-        .or(option_env!("GITHUB_REF_NAME").map(|s| s.into()));
-    let source_revision = attributes
-        .remove("source_revision")
-        .or(option_env!("GITHUB_SHA").map(|s| s.into()));
+    let source_release = attributes.remove("source_release");
+    let source_revision = attributes.remove("source_revision");
     let expiry = attributes.remove("expiry");
     let preferred_languages = attributes
         .remove("preferred_languages")
