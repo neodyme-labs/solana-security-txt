@@ -63,7 +63,7 @@ following to the macro to exclude it from `no-entrypoint` builds.
 #### Use as an indicator for the deployed code version
 
 In order to simplify access to the source code we recommend to include the commit hash as `source_revision` or the release tag as `source_release`.
-You can use the `option_env!` macro to automatically configure values passed to the `security_txt!` macro from the build process envioronment.
+You can use the `env!` macro to automatically configure values passed to the `security_txt!` macro from the build process envioronment.
 
 ### Example
 
@@ -79,8 +79,8 @@ security_txt! {
     // Optional Fields
     preferred_languages: "en,de",
     source_code: "https://github.com/example/example",
-    source_revision: option_env!("GITHUB_SHA").unwrap().into(),
-    source_release: option_env!("GITHUB_REF_NAME").unwrap().into(),
+    source_revision: env!("GITHUB_SHA"),
+    source_release: env!("GITHUB_REF_NAME"),
     encryption: "
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Comment: Alice's OpenPGP certificate
