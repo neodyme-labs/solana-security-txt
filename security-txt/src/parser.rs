@@ -68,7 +68,7 @@ impl Display for SecurityTxt {
         }
 
         if let Some(source_release) = &self.source_release {
-            writeln!(f, "Source releas: {}", source_release)?;
+            writeln!(f, "Source release: {}", source_release)?;
         }
 
         if let Some(source_revision) = &self.source_revision {
