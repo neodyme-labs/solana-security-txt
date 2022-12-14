@@ -69,6 +69,9 @@ You can use the `env!` macro to automatically configure values passed to the `se
 
 ```rust
 #[cfg(not(feature = "no-entrypoint"))]
+use {default_env::default_env, solana_security_txt::security_txt};
+
+#[cfg(not(feature = "no-entrypoint"))]
 security_txt! {
     // Required fields
     name: "Example",
@@ -79,8 +82,8 @@ security_txt! {
     // Optional Fields
     preferred_languages: "en,de",
     source_code: "https://github.com/example/example",
-    source_revision: env!("GITHUB_SHA"),
-    source_release: env!("GITHUB_REF_NAME"),
+    source_revision: default_env!("GITHUB_SHA", ""),
+    source_release: default_env!("GITHUB_REF_NAME", ""),
     encryption: "
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Comment: Alice's OpenPGP certificate
