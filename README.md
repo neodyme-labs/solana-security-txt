@@ -5,9 +5,9 @@
 [![](https://img.shields.io/crates/v/query-security-txt)](https://crates.io/crates/query-security-txt)
 
 This library defines a macro, which allows developers to provide easy-to-parse information to security researchers that wish to contact the authors of a Solana smart contract.
-It is inspired by https://securitytxt.org/.
+It is inspired by <https://securitytxt.org/>.
 
-See this example in the Solana Explorer: https://explorer.solana.com/address/HPxKXnBN4vJ8RjpdqDCU7gvNQHeeyGnSviYTJ4fBrDt4/security?cluster=devnet
+See this example in the Solana Explorer: <https://explorer.solana.com/address/HPxKXnBN4vJ8RjpdqDCU7gvNQHeeyGnSviYTJ4fBrDt4/security?cluster=devnet>
 
 
 ## Motivation
@@ -120,13 +120,13 @@ If you don't pay bounties, which might be sensible for toy projects that don't h
 > We do not pay a bug bounty.
 
 For more inspiration, take a look at how other large Solana projects structure their policies (random, non-exhaustive collection):
-- https://github.com/solana-labs/solana/security/policy
-- https://forum.projectserum.com/t/formalizing-a-bug-bounty-program/410
-- https://docs.marinade.finance/developers/bug-bounty
-- https://docs.solend.fi/protocol/bug-bounty
-- https://github.com/certusone/wormhole/blob/dev.v2/ImmuneFi%20bug-bounty.md
-- https://immunefi.com/bounty/lido/ 
-- https://docs.mango.markets/mango/bug-bounty
+- <https://github.com/solana-labs/solana/security/policy>
+- <https://forum.projectserum.com/t/formalizing-a-bug-bounty-program/410>
+- <https://docs.marinade.finance/developers/bug-bounty>
+- <https://docs.solend.fi/protocol/bug-bounty>
+- <https://github.com/certusone/wormhole/blob/dev.v2/ImmuneFi%20bug-bounty.md>
+- <https://immunefi.com/bounty/lido/ >
+- <https://docs.mango.markets/mango/bug-bounty>
 
 
 ## Format
@@ -191,8 +191,8 @@ Since Solana may move away from ELF binaries in the future, this section is opti
 
 Licensed under either of
 
- * Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
- * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+ * Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
+ * MIT license ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
 
 at your option.
 
