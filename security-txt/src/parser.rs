@@ -1,9 +1,8 @@
-
+use crate::{SECURITY_TXT_BEGIN, SECURITY_TXT_END};
+use core::fmt::{self, Display};
+use std::collections::HashMap;
 use thiserror::Error;
 use twoway::find_bytes;
-use crate::{SECURITY_TXT_BEGIN, SECURITY_TXT_END};
-use std::collections::HashMap;
-use core::fmt::{Display, self};
 
 pub enum Contact {
     Email(String),
@@ -34,6 +33,8 @@ pub struct SecurityTxt {
     pub policy: String,
     pub preferred_languages: Vec<String>,
     pub source_code: Option<String>,
+    pub source_release: Option<String>,
+    pub source_revision: Option<String>,
     pub encryption: Option<String>,
     pub auditors: Vec<String>,
     pub acknowledgements: Option<String>,
@@ -66,6 +67,14 @@ impl Display for SecurityTxt {
             writeln!(f, "Source code: {}", source_code)?;
         }
 
+        if let Some(source_release) = &self.source_release {
+            writeln!(f, "Source release: {}", source_release)?;
+        }
+
+        if let Some(source_revision) = &self.source_revision {
+            writeln!(f, "Source revision: {}", source_revision)?;
+        }
+
         if let Some(encryption) = &self.encryption {
             writeln!(f, "\nEncryption:")?;
             writeln!(f, "{}", encryption)?;
@@ -90,13 +99,13 @@ impl Display for SecurityTxt {
     }
 }
 
-
 impl Contact {
     pub fn from_str(s: &str) -> Result<Self, SecurityTxtError> {
         let (typ, value) = s
             .split_once(":")
             .ok_or_else(|| SecurityTxtError::InvalidContact(s.to_string()))?;
-        let (contact_type, contact_info) = (typ.trim(), value.trim());        match contact_type.to_ascii_lowercase().as_str() {
+        let (contact_type, contact_info) = (typ.trim(), value.trim());
+        match contact_type.to_ascii_lowercase().as_str() {
             "email" => Ok(Contact::Email(contact_info.to_string())),
             "discord" => Ok(Contact::Discord(contact_info.to_string())),
             "telegram" => Ok(Contact::Telegram(contact_info.to_string())),
@@ -172,6 +181,8 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
         .remove("project_url")
         .ok_or_else(|| SecurityTxtError::MissingField("project_url".to_string()))?;
     let source_code = attributes.remove("source_code");
+    let source_release = attributes.remove("source_release");
+    let source_revision = attributes.remove("source_revision");
     let expiry = attributes.remove("expiry");
     let preferred_languages = attributes
         .remove("preferred_languages")
@@ -208,6 +219,8 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
         name,
         project_url,
         source_code,
+        source_release,
+        source_revision,
         expiry,
         preferred_languages,
         contacts,

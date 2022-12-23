@@ -60,9 +60,17 @@ following to the macro to exclude it from `no-entrypoint` builds.
 #[cfg(not(feature = "no-entrypoint"))]
 ```
 
+#### Use as an indicator for the deployed code version
+
+In order to simplify access to the source code we recommend to include the commit hash as `source_revision` or the release tag as `source_release`.
+You can use the `env!` macro to automatically configure values passed to the `security_txt!` macro from the build process envioronment.
+
 ### Example
 
 ```rust
+#[cfg(not(feature = "no-entrypoint"))]
+use {default_env::default_env, solana_security_txt::security_txt};
+
 #[cfg(not(feature = "no-entrypoint"))]
 security_txt! {
     // Required fields
@@ -74,6 +82,8 @@ security_txt! {
     // Optional Fields
     preferred_languages: "en,de",
     source_code: "https://github.com/example/example",
+    source_revision: default_env!("GITHUB_SHA", ""),
+    source_release: default_env!("GITHUB_REF_NAME", ""),
     encryption: "
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Comment: Alice's OpenPGP certificate
@@ -136,8 +146,10 @@ The following fields are supported, some of which are required for this to be co
 | **`contacts`**        |   list (required)    | A comma-separated list of contact information in the format `<contact type>:<contact information>`. Should roughly be ordered in preference. Possible contact types are `email`, `link`, `discord`, `telegram`, `twitter` and `other`. Prefer contact types that likely won't change for a while, like a `security@example.com` email address. |
 | **`policy`**          | link/text (required) | Either a link or a text document describing the project's security policy. This should describe what kind of bounties your project offers and the terms under which you offer them.                                                                                                                                                            |
 | `preferred_languages` |   list (optional)    | A comma-separated list of preferred languages (ISO 639-1).                                                                                                                                                                                                                                                                                     |
-| `source_code`         |   link (optional)    | A URL to the project's source code.                                                                                                                                                                                                                                                                                                            |
 | `encryption`          | link/text (optional) | A PGP public key block (or similar) or a link to one.                                                                                                                                                                                                                                                                                          |
+| `source_code`         |   link (optional)    | A URL to the project's source code.                                                                                                                                                                                                                                                                                                            |
+| `source_release`      |  string (optional    | The release identifier of this build, ideally corresponding to a tag on git that can be rebuilt to reproduce the same binary. 3rd party build verification tools will use this tag to identify a matching github releases.                                                                                                                     |
+| `source_revision      |  string (optional)   | The revision identifier of this build, usually a git sha that can be rebuilt to reproduce the same binary. 3rd party build verification tools will use this tag to identify a matching github releases.                                                                                                                                        |
 | `auditors`            | link/list (optional) | A comma-separated list of people or entities that audited this smart contract, or a link to a page where audit reports are hosted. Note that this field is self-reported by the author of the program and might not be accurate.                                                                                                               |
 | `acknowledgements`    | link/text (optional) | Either a link or a text document containing acknowledgements to security researchers who have previously found vulnerabilities in the project.                                                                                                                                                                                                 |
 | `expiry`              |   date (optional)    | The date the security.txt will expire. The format is YYYY-MM-DD.                                                                                                                                                                                                                                                                               |
