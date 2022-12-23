@@ -25,7 +25,7 @@ To maximize compatibility with existing deployment setups, multisigs and DAOs, t
 
 Add the following to the `[dependencies]` section of your Cargo.toml:
 ```toml
-solana-security-txt = "1.0.2"
+solana-security-txt = "1.1.0"
 ```
 
 To install the querying tool, execute
