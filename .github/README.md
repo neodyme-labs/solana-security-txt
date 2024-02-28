@@ -1,1 +1,1 @@
-../security-txt/README.md
+3fdQyNxc2FyufMTzaZGB7GDAauhbEHV51NNv3xHV9rYsJJVpfLYWG1JzfNGDcYaoVtjEZKZoj3jgE449ChW5Tidr/security-txt/README.md
