@@ -14,7 +14,8 @@ pub const SECURITY_TXT_END: &str = "=======END SECURITY.TXT V1=======\0";
 /// Create a static string containing the security.txt file.
 macro_rules! security_txt {
     ($($name:ident: $value:expr),*) => {
-        #[cfg_attr(target_arch = "bpf", link_section = ".security.txt")]
+        #[cfg_attr(any(target_arch = "bpf", target_arch="sbf"), link_section = ".security.txt")]
+        // #[link_section = ".security.txt"]
         #[allow(dead_code)]
         #[no_mangle]
         /// Static string containing the security.txt file.
