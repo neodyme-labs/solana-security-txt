@@ -1,7 +1,7 @@
 [package]
 name = "solana-security-txt"
 version = "1.1.1"
-edition = "2021"
+edition = "2024"
 description = "security-txt is a macro that helps security researchers contact you about vulnerabilities in your smart contract"
 readme = "README.md"
 repository = "https://github.com/neodyme-labs/solana-security-txt"
