@@ -12,5 +12,6 @@ license = "MIT OR Apache-2.0"
 parser = ["thiserror", "twoway"]
 
 [dependencies]
-thiserror = { version = "=1.0.30", optional = true }
+hashbrown = "=0.15.2"
+thiserror = { version = "=2.0.12", optional = true }
 twoway = { version = "=0.2.2", optional = true }
