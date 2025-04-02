@@ -1,6 +1,13 @@
 use crate::{SECURITY_TXT_BEGIN, SECURITY_TXT_END};
-use core::fmt::{self, Display};
-use std::collections::HashMap;
+use alloc::{
+    string::{String, ToString},
+    vec::Vec,
+};
+use core::{
+    fmt::{self, Display},
+    str::from_utf8,
+};
+use hashbrown::HashMap;
 use thiserror::Error;
 use twoway::find_bytes;
 
@@ -99,8 +106,10 @@ impl Display for SecurityTxt {
     }
 }
 
-impl Contact {
-    pub fn from_str(s: &str) -> Result<Self, SecurityTxtError> {
+impl TryFrom<&str> for Contact {
+    type Error = SecurityTxtError;
+
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
         let (typ, value) = s
             .split_once(":")
             .ok_or_else(|| SecurityTxtError::InvalidContact(s.to_string()))?;
@@ -157,13 +166,13 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
     let mut field: Option<String> = None;
     for part in data.split(|&b| b == 0) {
         if let Some(ref f) = field {
-            let value = std::str::from_utf8(part)
+            let value = from_utf8(part)
                 .map_err(|_| SecurityTxtError::InvalidValue(part.to_vec(), f.clone()))?;
             attributes.insert(f.clone(), value.to_string());
             field = None;
         } else {
             field = Some({
-                let field = std::str::from_utf8(part)
+                let field = from_utf8(part)
                     .map_err(|_| SecurityTxtError::InvalidField(part.to_vec()))?
                     .to_string();
                 if attributes.contains_key(&field) {
@@ -194,7 +203,7 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
         .remove("contacts")
         .ok_or_else(|| SecurityTxtError::MissingField("contacts".to_string()))?
         .split(",")
-        .map(|s| Contact::from_str(s.trim()))
+        .map(|s| Contact::try_from(s.trim()))
         .collect();
     let contacts = contacts?;
     let auditors: Vec<_> = attributes
