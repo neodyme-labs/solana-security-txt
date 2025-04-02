@@ -1,4 +1,8 @@
 #![doc = include_str!("../README.md")]
+#![no_std]
+
+#[cfg(feature = "parser")]
+extern crate alloc;
 
 #[cfg(feature = "parser")]
 mod parser;
@@ -18,7 +22,7 @@ macro_rules! security_txt {
         #[allow(dead_code)]
         #[no_mangle]
         /// Static string containing the security.txt file.
-        pub static security_txt: &str = concat! {
+        pub static SECURITY_TXT: &str = concat! {
             "=======BEGIN SECURITY.TXT V1=======\0",
             $(stringify!($name), "\0", $value, "\0",)*
             "=======END SECURITY.TXT V1=======\0"
