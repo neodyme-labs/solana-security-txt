@@ -1,0 +1,12 @@
+{
+  "name": "AZAR COIN",
+  "symbol": "QARABAG",
+  "decimals": 6,
+  "logoURI": "https://raw.githubusercontent.com/YOUR_USERNAME/token-list/main/assets/mainnet/7xa6wLWkXJU9syfwtkmsnz6KvkgvE9gsqNUEfK4jokBY/logo.png",
+  "tags": ["utility-token", "community-token"],
+  "extensions": {
+    "website": "https://azarcoin.example.com",
+    "twitter": "https://twitter.com/azarcoin",
+    "description": "AZAR COIN is a utility token built on the Solana blockchain."
+  }
+}
