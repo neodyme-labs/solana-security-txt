@@ -42,7 +42,7 @@ As many projects are best reachable via Telegram or Discord there is native supp
 The `security_txt` macro is intentionally kept brief. As such, it doesn't do any input validation. For optimal experience, **please verify the format before uploading the contract to the chain.** This can be done with the provided `query-security-txt` program, which can not only be called with on-chain contracts but also local binaries:
 
 ```sh
-query-security-txt target/bpfel-unknown-unknown/release/example_contract.so
+query-security-txt target/sbpf-solana-solana/release/example_contract.so
 ```
 
 #### Notice for library authors
