@@ -1,4 +1,11 @@
-use anchor_lang::prelude::*;
+#![allow(unexpected_cfgs)]
+use pinocchio::{
+  account_info::AccountInfo,
+  entrypoint,
+  msg,
+  ProgramResult,
+  pubkey::Pubkey
+};
 
 use solana_security_txt::security_txt;
 
@@ -37,17 +44,13 @@ The following hackers could've stolen all our money but didn't:
 "
 }
 
-declare_id!("H6EoGSe3xgMEsnjg8ADcXb5B8GF4gJXEesQhyMFz4ZxR");
+entrypoint!(process_instruction);
 
-#[program]
-pub mod example_contract {
-    use super::*;
-
-    pub fn hello_world(_ctx: Context<HelloWorld>) -> Result<()> {
-        msg!("Hello World!");
-        Ok(())
-    }
+pub fn process_instruction(
+  _program_id: &Pubkey,
+  _accounts: &[AccountInfo],
+  _instruction_data: &[u8],
+) -> ProgramResult {
+  msg!("Hello from my program!");
+  Ok(())
 }
-
-#[derive(Accounts)]
-pub struct HelloWorld {}

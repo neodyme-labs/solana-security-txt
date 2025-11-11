@@ -1,2 +1,3 @@
 [workspace]
 members = ["security-txt", "query-security-txt", "example-contract"]
+resolver = "2"

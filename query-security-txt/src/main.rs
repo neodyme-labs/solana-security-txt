@@ -2,11 +2,10 @@ use std::{path::PathBuf, str::FromStr};
 
 use clap::Parser;
 use color_eyre::{eyre::eyre, Result};
-use solana_client::rpc_client::RpcClient;
-use solana_sdk::{
-    bpf_loader_upgradeable::{self, UpgradeableLoaderState},
-    pubkey::Pubkey,
-};
+use solana_rpc_client::rpc_client::RpcClient;
+use solana_loader_v3_interface::state::UpgradeableLoaderState;
+use solana_pubkey::Pubkey;
+use solana_sdk_ids::bpf_loader_upgradeable;
 
 #[derive(Parser)]
 struct Args {
@@ -25,10 +24,8 @@ fn main() -> Result<()> {
 
     if let Ok(pubkey) = Pubkey::from_str(&args.program) {
         query_remote(args.url.as_str(), pubkey)
-    } else if let Ok(file) = PathBuf::from_str(&args.program) {
-        query_local(file)
     } else {
-        Err(eyre!("Program is neither a pubkey nor a path"))
+        query_local(PathBuf::from(args.program))
     }
 }
 
@@ -77,7 +74,7 @@ fn query_remote(url: &str, pubkey: Pubkey) -> Result<()> {
         .get_account(&program_data_address)
         .map_err(|_| eyre!("Couldn't fetch program data account"))?;
 
-    let offset = UpgradeableLoaderState::programdata_data_offset()?;
+    let offset = UpgradeableLoaderState::size_of_programdata_metadata();
     if program_data_account.data.len() < offset {
         return Err(eyre!("Account is too small to be a program data account"));
     }

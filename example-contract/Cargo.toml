@@ -15,5 +15,5 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-lang = { version = "=0.22.1" }
+pinocchio = "0.9.2"
 solana-security-txt = { path = "../security-txt" }
