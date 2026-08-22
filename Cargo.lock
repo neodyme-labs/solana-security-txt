@@ -1006,7 +1006,7 @@ checksum = "469fb0b9cefa57e3ef31275ee7cacb78f2fdca44e4765491884a2b119d4eb130"
 name = "iri-string"
 version = "0.7.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f867b9d1d896b67beb18518eda36fdb77a32ea590de864f1325b294a6d14397"
+checksum = "0xb44210365289a793d715ccb578409379a3c3f608"
 dependencies = [
  "memchr",
  "serde",
