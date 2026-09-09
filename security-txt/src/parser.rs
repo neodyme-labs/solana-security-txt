@@ -1,5 +1,6 @@
 use crate::{SECURITY_TXT_BEGIN, SECURITY_TXT_END};
 use alloc::{
+    collections::BTreeMap,
     string::{String, ToString},
     vec::Vec,
 };
@@ -7,9 +8,8 @@ use core::{
     fmt::{self, Display},
     str::from_utf8,
 };
-use hashbrown::HashMap;
+use memchr::memmem::find as find_bytes;
 use thiserror::Error;
-use twoway::find_bytes;
 
 pub enum Contact {
     Email(String),
@@ -162,7 +162,7 @@ pub fn parse(mut data: &[u8]) -> Result<SecurityTxt, SecurityTxtError> {
 
     data = &data[SECURITY_TXT_BEGIN.len()..end];
 
-    let mut attributes = HashMap::<String, String>::default();
+    let mut attributes = BTreeMap::<String, String>::new();
     let mut field: Option<String> = None;
     for part in data.split(|&b| b == 0) {
         if let Some(ref f) = field {
